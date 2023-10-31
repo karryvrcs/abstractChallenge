@@ -1,6 +1,6 @@
 public class Node extends ListItem{
 
-    public Node(Double value){
+    public Node(Object value){
         super(value);
     }
 

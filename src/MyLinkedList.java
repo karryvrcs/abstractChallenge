@@ -44,7 +44,7 @@ public class MyLinkedList implements NodeList{
                 // (if possible, check whether the next exists first!)
                 // Current is not the last node, move to the next item.
                 if(current.next() != null){
-                    current = current.next();
+                    current = current.next(); // move for comparing.
                 } else {
                     // there is no next node, so insert the item at end of the list
                     current.setNext(item);
@@ -55,23 +55,60 @@ public class MyLinkedList implements NodeList{
             } else if (comparison > 0){
                 // item is less, insert the item [before] the current item (left) (currentItem前面可能已经有一个entry，所以要insert between the entry and currentItem
                 if (current.previous() != null){
-                    current
+                    current.previous().setNext(item);
+                    item.setPrevious(current.previous());
+                    item.setNext(current);
+                    current.setPrevious(item);
                 } else {
-
+                    item.setNext(current);
+                    current.setPrevious(item);
+                    root = item; // Insert an entry before the linkedList, so we have to assign the newItem to the root.
                 }
+                return true;
+            } else {
+                System.out.println("Already exists");
+                return false;
             }
         }
-
-    }
-
-    @Override
-    public boolean removeItem(ListItem item) {
         return false;
     }
 
     @Override
-    public void tranverse(ListItem root) {
+    public boolean removeItem(ListItem item) {
+        Object object = new Object();
+        ListItem dummy = new Node(object);
+        dummy.setNext(root);
+        root.setPrevious(dummy);
+        ListItem current = dummy;
+        boolean flag = false;
+        while (current.next() != null){
+            if (current.next().compareTo(item) == 0) {
+                current.setNext(current.next().next());
+                flag = true;
+            } else {
+                // move to next node
+                current = current.next();
+            }
+        }
+        root = dummy.next();
+        return flag;
+    }
 
+
+    // takes the root as an argument and does not return anything.
+    // It uses recursion to visit all the branches in the tree (Inorder). Print each value on a separate line.
+
+
+
+    @Override
+    public void traverse(ListItem root) {
+        if (root == null){
+            System.out.println("empty");
+        }
+        while (root != null){
+            System.out.println(root.getValue());
+            root = root.next();
+        }
     }
 
 
